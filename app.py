@@ -2,53 +2,73 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-from src.preprocess import clean_data, feature_engineering, feature_encode
+from src.preprocess import clean_data, feature_engineering, feature_encode, feature_scaling
 
-# ✅ Load model & scaler (already trained)
-model = joblib.load(r"D:\Churn prediction\src\models\model.pkl")
-scaler = joblib.load(r"D:\Churn prediction\src\models\scaler.pkl")
+# Load model & scaler
+model = joblib.load("src/models/model.pkl")
+scaler = joblib.load("src/models/scaler.pkl")
+model_cols = ['gender' 'SeniorCitizen' 'Partner' 'Dependents' 'tenure' 'PhoneService'
+ 'PaperlessBilling' 'MonthlyCharges' 'TotalCharges' 'NumServices'
+ 'AvgMonthlyCharge' 'MultipleLines_Yes' 'InternetService_Fiber optic'
+ 'InternetService_No' 'OnlineSecurity_Yes' 'OnlineBackup_Yes'
+ 'DeviceProtection_Yes' 'TechSupport_Yes' 'StreamingTV_Yes'
+ 'StreamingMovies_Yes' 'Contract_One year' 'Contract_Two year'
+ 'PaymentMethod_Credit card (automatic)' 'PaymentMethod_Electronic check'
+ 'PaymentMethod_Mailed check']
 
-st.title("Customer Churn Prediction")
+st.title("Customer Churn Prediction (Simple)")
 
-# 👉 User Inputs
-tenure = st.number_input("Tenure", 0, 100)
-monthly = st.number_input("Monthly Charges", 0.0, 10000.0)
-total = st.number_input("Total Charges", 0.0, 100000.0)
+# ===== Only 3 Inputs =====
+tenure = st.number_input("Tenure (months)", min_value=0)
+MonthlyCharges = st.number_input("Monthly Charges")
+TotalCharges = st.number_input("Total Charges")
 
-# 👉 Predict Button
 if st.button("Predict"):
 
-    # ✅ Step 1: Create input dataframe
-    input_data = pd.DataFrame({
-        'tenure': [tenure],
-        'MonthlyCharges': [monthly],
-        'TotalCharges': [total]
-    })
+    # Default values for all required columns
+    input_dict = {
+        'gender': 'Male',
+        'SeniorCitizen': 0,
+        'Partner': 'No',
+        'Dependents': 'No',
+        'tenure': tenure,
+        'PhoneService': 'Yes',
+        'MultipleLines': 'No',
+        'InternetService': 'DSL',
+        'OnlineSecurity': 'No',
+        'OnlineBackup': 'No',
+        'DeviceProtection': 'No',
+        'TechSupport': 'No',
+        'StreamingTV': 'No',
+        'StreamingMovies': 'No',
+        'Contract': 'Month-to-month',
+        'PaperlessBilling': 'Yes',
+        'PaymentMethod': 'Electronic check',
+        'MonthlyCharges': MonthlyCharges,
+        'TotalCharges': TotalCharges
+    }
 
-    # ✅ Step 2: Apply SAME preprocessing
-    input_data = clean_data(input_data)
-    input_data = feature_engineering(input_data)   # creates AvgMonthlyCharge
-    input_data = feature_encode(input_data)
+    df = pd.DataFrame([input_dict])
 
-    # ✅ Step 3: Scaling (use saved scaler ONLY)
-    num_cols = ['tenure', 'MonthlyCharges', 'TotalCharges', 'AvgMonthlyCharge']
+    # ===== Apply Pipeline =====
+    df = clean_data(df)
+    df = feature_engineering(df)
+    df = feature_encode(df)
 
-    # ensure all required numeric columns exist
-    for col in num_cols:
-        if col not in input_data.columns:
-            input_data[col] = 0
+    # Align columns
+    for col in model_cols:
+        if col not in df.columns:
+            df[col] = 0
 
-    input_data[num_cols] = scaler.transform(input_data[num_cols])
+    df = df[model_cols]
 
-    # ✅ Step 4: Match training columns
-    model_cols = model.feature_names_in_
-    input_data = input_data.reindex(columns=model_cols, fill_value=0)
+    # Scaling
+    df = feature_scaling(df, train=False, scaler=scaler)
 
-    # ✅ Step 5: Prediction
-    pred = model.predict(input_data)[0]
-    prob = model.predict_proba(input_data)[0][1]
+    # Prediction
+    pred = model.predict(df)[0]
 
-    # ✅ Step 6: Output
-    st.subheader("Result")
-    st.write("Prediction:", "Churn" if pred == 1 else "No Churn")
-    st.write("Churn Probability:", round(prob, 2))
+    if pred == 1:
+        st.error("Customer will Churn ❌")
+    else:
+        st.success("Customer will Stay ✅")
