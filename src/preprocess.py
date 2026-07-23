@@ -3,8 +3,6 @@
 import pandas as pd  
 import numpy as np
 
-#data import
-df = pd.read_csv("D:\Projects\ML projects\Churn prediction\data\churn_data.csv")
 #data cleaning 
 # Drop Unnecessary Column
 def clean_data(df) :
