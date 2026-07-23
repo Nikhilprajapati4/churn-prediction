@@ -238,7 +238,6 @@ value=1000.0
 
 input_data = pd.DataFrame({
 
-```
 "gender": [gender],
 
 "SeniorCitizen": [senior_citizen],
@@ -276,7 +275,6 @@ input_data = pd.DataFrame({
 "MonthlyCharges": [monthly_charges],
 
 "TotalCharges": [total_charges]
-```
 
 })
 
@@ -306,7 +304,7 @@ if st.button(
 use_container_width=True
 ):
 
-```
+
 try:
 
     # 1. Clean Data
@@ -383,4 +381,3 @@ except Exception as e:
     st.error(
         f"Prediction error: {e}"
     )
-```
