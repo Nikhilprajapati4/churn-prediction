@@ -305,79 +305,61 @@ use_container_width=True
 ):
 
 
-try:
+if st.button(
+    "🔮 Predict Churn",
+    use_container_width=True
+):
 
-    # 1. Clean Data
+    try:
 
-    processed_data = clean_data(
-        input_data.copy()
-    )
+        processed_data = clean_data(
+            input_data.copy()
+        )
 
+        processed_data = feature_engineering(
+            processed_data
+        )
 
-    # 2. Feature Engineering
+        processed_data = feature_encode(
+            processed_data
+        )
 
-    processed_data = feature_engineering(
-        processed_data
-    )
+        processed_data = processed_data.reindex(
+            columns=train_columns,
+            fill_value=0
+        )
 
+        prediction = model.predict(
+            processed_data
+        )
 
-    # 3. Feature Encoding
+        probability = model.predict_proba(
+            processed_data
+        )[0][1]
 
-    processed_data = feature_encode(
-        processed_data
-    )
+        if prediction[0] == 1:
 
+            st.error(
+                "⚠️ Customer is likely to churn"
+            )
 
-    # 4. Align Columns with Training Data
+        else:
 
-    processed_data = processed_data.reindex(
-        columns=train_columns,
-        fill_value=0
-    )
+            st.success(
+                "✅ Customer is unlikely to churn"
+            )
 
+        st.metric(
+            "Churn Probability",
+            f"{probability:.2%}"
+        )
 
-    # 5. Make Prediction
+        st.progress(
+            float(probability)
+        )
 
-    prediction = model.predict(
-        processed_data
-    )
-
-
-    probability = model.predict_proba(
-        processed_data
-    )[0][1]
-
-
-    # 6. Display Result
-
-    if prediction[0] == 1:
+    except Exception as e:
 
         st.error(
-            "⚠️ Customer is likely to churn"
+            f"Prediction error: {e}"
         )
-
-    else:
-
-        st.success(
-            "✅ Customer is unlikely to churn"
-        )
-
-
-    # 7. Display Probability
-
-    st.metric(
-        "Churn Probability",
-        f"{probability:.2%}"
-    )
-
-
-    st.progress(
-        float(probability)
-    )
-
-
-except Exception as e:
-
-    st.error(
-        f"Prediction error: {e}"
-    )
