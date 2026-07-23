@@ -29,30 +29,29 @@ BASE_DIR,
 # LOAD MODEL AND TRAINING COLUMNS
 
 # ============================================================
-
 model_path = os.path.join(
-MODEL_DIR,
-"model.pkl"
+    MODEL_DIR,
+    "model.pkl"
 )
 
 columns_path = os.path.join(
-MODEL_DIR,
-"train_columns.pkl"
+    MODEL_DIR,
+    "train_columns.pkl"
 )
 
 try:
+
     model = joblib.load(model_path)
 
     train_columns = joblib.load(columns_path)
 
 except Exception as e:
 
-st.error(
-    f"Error loading model files: {e}"
-)
+    st.error(
+        f"Error loading model files: {e}"
+    )
 
-st.stop()
-
+    st.stop()
 # ============================================================
 
 # STREAMLIT PAGE CONFIGURATION
