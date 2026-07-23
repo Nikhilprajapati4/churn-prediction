@@ -298,38 +298,6 @@ use_container_width=True
 # PREDICTION
 
 # ============================================================
-
-if st.button(
-"🔮 Predict Churn",
-use_container_width=True
-):
-    if st.button("🔮 Predict Churn",use_container_width=True):
-        try:
-            processed_data = clean_data(
-            input_data.copy()
-            )
-
-            processed_data = feature_engineering(
-                processed_data
-            )
-    
-            processed_data = feature_encode(
-                processed_data
-            )
-    
-            processed_data = processed_data.reindex(
-                columns=train_columns,
-                fill_value=0
-            )
-    
-            prediction = model.predict(
-                processed_data
-            )
-
-            probability = model.predict_proba(
-                processed_data
-            )[0][1]
-
 if st.button(
     "🔮 Predict Churn",
     use_container_width=True
@@ -337,8 +305,37 @@ if st.button(
 
     try:
 
-        # Your preprocessing and prediction code here
+        # 1. Clean Data
+        processed_data = clean_data(
+            input_data.copy()
+        )
 
+        # 2. Feature Engineering
+        processed_data = feature_engineering(
+            processed_data
+        )
+
+        # 3. Feature Encoding
+        processed_data = feature_encode(
+            processed_data
+        )
+
+        # 4. Align Columns
+        processed_data = processed_data.reindex(
+            columns=train_columns,
+            fill_value=0
+        )
+
+        # 5. Prediction
+        prediction = model.predict(
+            processed_data
+        )
+
+        probability = model.predict_proba(
+            processed_data
+        )[0][1]
+
+        # 6. Display Result
         if prediction[0] == 1:
 
             st.error(
@@ -351,6 +348,7 @@ if st.button(
                 "✅ Customer is unlikely to churn"
             )
 
+        # 7. Display Probability
         st.metric(
             "Churn Probability",
             f"{probability:.2%}"
@@ -365,3 +363,4 @@ if st.button(
         st.error(
             f"Prediction error: {e}"
         )
+
