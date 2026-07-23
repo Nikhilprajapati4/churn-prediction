@@ -3,8 +3,8 @@ import pandas as pd
 import joblib
 
 # Load model & scaler
-model = joblib.load("src/models/model.pkl")
-scaler = joblib.load("src/models/scaler.pkl")
+model = joblib.load("models/model.pkl")
+scaler = joblib.load("models/scaler.pkl")
 model_cols = ['gender' 'SeniorCitizen' 'Partner' 'Dependents' 'tenure' 'PhoneService'
  'PaperlessBilling' 'MonthlyCharges' 'TotalCharges' 'NumServices'
  'AvgMonthlyCharge' 'MultipleLines_Yes' 'InternetService_Fiber optic'
