@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-from src.preprocess import clean_data, feature_engineering, feature_encode, feature_scaling
-
 # Load model & scaler
 model = joblib.load("src/models/model.pkl")
 scaler = joblib.load("src/models/scaler.pkl")
