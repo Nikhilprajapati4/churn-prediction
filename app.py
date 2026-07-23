@@ -360,7 +360,7 @@ if st.button(
 
     except Exception as e:
 
-        st.error(
+        st.erro(
             f"Prediction error: {e}"
         )
 
