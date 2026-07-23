@@ -304,31 +304,31 @@ if st.button(
 use_container_width=True
 ):
     if st.button("🔮 Predict Churn",use_container_width=True):
-    try:
-        processed_data = clean_data(
+        try:
+            processed_data = clean_data(
             input_data.copy()
-        )
+            )
 
-        processed_data = feature_engineering(
-            processed_data
-        )
+            processed_data = feature_engineering(
+                processed_data
+            )
+    
+            processed_data = feature_encode(
+                processed_data
+            )
+    
+            processed_data = processed_data.reindex(
+                columns=train_columns,
+                fill_value=0
+            )
+    
+            prediction = model.predict(
+                processed_data
+            )
 
-        processed_data = feature_encode(
-            processed_data
-        )
-
-        processed_data = processed_data.reindex(
-            columns=train_columns,
-            fill_value=0
-        )
-
-        prediction = model.predict(
-            processed_data
-        )
-
-        probability = model.predict_proba(
-            processed_data
-        )[0][1]
+            probability = model.predict_proba(
+                processed_data
+            )[0][1]
 
         if prediction[0] == 1:
 
