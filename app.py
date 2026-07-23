@@ -41,22 +41,17 @@ MODEL_DIR,
 )
 
 try:
+    model = joblib.load(model_path)
 
-```
-model = joblib.load(model_path)
-
-train_columns = joblib.load(columns_path)
-```
+    train_columns = joblib.load(columns_path)
 
 except Exception as e:
 
-```
 st.error(
     f"Error loading model files: {e}"
 )
 
 st.stop()
-```
 
 # ============================================================
 
