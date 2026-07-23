@@ -330,6 +330,15 @@ use_container_width=True
                 processed_data
             )[0][1]
 
+if st.button(
+    "🔮 Predict Churn",
+    use_container_width=True
+):
+
+    try:
+
+        # Your preprocessing and prediction code here
+
         if prediction[0] == 1:
 
             st.error(
