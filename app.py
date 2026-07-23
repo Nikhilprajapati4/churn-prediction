@@ -303,9 +303,7 @@ if st.button(
 "🔮 Predict Churn",
 use_container_width=True
 ):
-
-
-if st.button("🔮 Predict Churn",use_container_width=True):
+    if st.button("🔮 Predict Churn",use_container_width=True):
     try:
         processed_data = clean_data(
             input_data.copy()
