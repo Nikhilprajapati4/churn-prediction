@@ -41,9 +41,9 @@ columns_path = os.path.join(
 
 try:
 
-    model = joblib.load(model_path)
+    model = joblib.load("models/model.pkl")
 
-    train_columns = joblib.load(columns_path)
+    train_columns = joblib.load("models/train_columns.pkl")
 
 except Exception as e:
 
