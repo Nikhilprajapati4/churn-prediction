@@ -14,7 +14,7 @@ MODEL_DIR  = os.path.join(BASE_DIR, "models")
 os.makedirs(MODEL_DIR, exist_ok=True)   # create models/ folder if missing
 
 # ── 1. Load data ───────────────────────────────────────────────────────────────
-df = pd.read_csv(r'D:\Projects\ML projects\Churn prediction\data\churn_data.csv')
+df = pd.read_csv(r'data\churn_data.csv')
 
 # ── 2. Preprocessing ───────────────────────────────────────────────────────────
 df = clean_data(df)
